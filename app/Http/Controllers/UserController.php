@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -51,9 +52,40 @@ class UserController extends Controller
     }
 
 
-    // public function get() {
-    //     $users = User::all();
+    public function myAccount($id) {
 
-    //      return response()->json(['users' => $users], 200);
-    // }
+        $myAccount = User::findOrFail($id);
+         return response()->json(['message' => $myAccount]);
+    }
+
+
+    public function editAccount(Request $request, User $user, $id) {
+        try {
+            $userToUpdate = $user::findOrFail($id);
+
+         if (empty($request['password'])) {
+            return response()->json(['error' => 'Password empty!'], 422);
+        }
+
+        if (!Hash::check($request['password'], $userToUpdate->password)) {
+            return response()->json(['error' => 'Password is incorrect!'], 422);
+        }
+
+        if($userToUpdate->first_name == $request['first_name'] && $userToUpdate->last_name == $request['last_name'] && $userToUpdate->email == $request['email'] && $userToUpdate->username == $request['username']) {
+            return response()->json(['error' => 'The provided data matches the existing information in the database. No changes were made to update your account.'], 422);
+        }
+        
+        $userToUpdate->first_name = $request['first_name'];
+        $userToUpdate->last_name = $request['last_name'];
+        $userToUpdate->email = $request['email'];
+        $userToUpdate->username = $request['username'];
+
+        $userToUpdate->save();
+        
+
+         return response()->json(['success' => true]);
+        } catch(\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 422);
+        }
+    }
 }

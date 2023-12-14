@@ -43,6 +43,7 @@ class QuestionPolicy
     public function update(User $user, Question $question): bool
     {
         //
+        return $user->account_type == 'admin';
     }
 
     /**
@@ -51,6 +52,8 @@ class QuestionPolicy
     public function delete(User $user, Question $question): bool
     {
         //
+
+        return $user->account_type == 'admin';
     }
 
     /**
@@ -67,5 +70,7 @@ class QuestionPolicy
     public function forceDelete(User $user, Question $question): bool
     {
         //
+
+        return $user->account_type == 'admin';
     }
 }
