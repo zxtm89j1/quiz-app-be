@@ -59,7 +59,7 @@ class ScoreController extends Controller
     public function myScores(Score $score, $id) {
 
      try {
-       $myScores = $score::where('user_id', $id)->latest()->get();
+       $myScores = $score::where('user_id', $id)->latest()->paginate(5);
 
         return response()->json(['message' => $myScores]);
      } catch (Exception $e) {
