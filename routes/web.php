@@ -14,8 +14,5 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return response("Hello Bitch. Gabalik balik na ko diri", 200);
-});
 
 Route::post("/signup", [UserController::class, 'store'])->middleware('cors');
